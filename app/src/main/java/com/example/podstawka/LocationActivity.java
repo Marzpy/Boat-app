@@ -42,7 +42,7 @@ public class LocationActivity extends AppCompatActivity {
 
     private TextView AddressText;
     private Button LocationButton;
-    private Button launchBTN,change;
+    private Button launchBTN, change;
     private LocationRequest locationRequest;
     static double latitude;
     static double longitude;
@@ -54,7 +54,7 @@ public class LocationActivity extends AppCompatActivity {
         setContentView(R.layout.location);
         change = findViewById(R.id.changeactivity);
         launchBTN = findViewById(R.id.launch);
-
+/*
         change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +84,6 @@ public class LocationActivity extends AppCompatActivity {
         LocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 getCurrentLocation();
             }
         });
@@ -226,8 +225,8 @@ public class LocationActivity extends AppCompatActivity {
 
 
 
+*/
 
-
+    }
 }
-
 
