@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".MainActivity">
+
+
+
+
+    <ImageView
+        android:id="@+id/imageView"
+
+        android:layout_width="62dp"
+        android:layout_height="59dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="4dp"
+        android:foregroundGravity="clip_horizontal"
+        android:src="@drawable/android"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"
+        android:contentDescription="TODO" />
+
+    <Button
+        android:id="@+id/dimplus"
+        android:layout_width="107dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="216dp"
+        android:background="@drawable/round_button"
+        android:text="Dim +"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.953"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/dimminus"
+        android:layout_width="118dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="216dp"
+        android:background="@drawable/round_button"
+        android:text="Dim -"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.013"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/setcourse"
+        android:layout_width="127dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="288dp"
+        android:background="@drawable/round_button"
+        android:text="Set Course"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.485"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="134dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="624dp"
+        android:background="@drawable/round_button"
+        android:text="START"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.072"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/stop"
+        android:layout_width="143dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="624dp"
+        android:background="@drawable/alarmbutton"
+        android:text="HELP!!!"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.891"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/arrow"
+
+        android:layout_width="174dp"
+        android:layout_height="149dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="116dp"
+        android:foregroundGravity="clip_horizontal"
+        android:src="@drawable/ic_baseline_navigation_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.027" />
+
+    <TextView
+        android:id="@+id/CourseAngle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="180°"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.266" />
+
+    <Button
+        android:id="@+id/speed"
+        android:layout_width="131dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="524dp"
+        android:background="@drawable/round_button"
+        android:text="Set Velocity"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.478"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/textSpeed"
+        android:layout_width="142dp"
+        android:layout_height="55dp"
+        android:text="   5mph"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.572"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.594" />
+
+    <EditText
+        android:id="@+id/editcourse"
+        android:layout_width="71dp"
+        android:maxLines="1"
+        android:digits="0123456789"
+        android:maxLength="3"
+        android:layout_height="57dp"
+        android:text="179"
+        android:inputType="number"
+        android:ems="10"
+        android:hint= "0-180"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.342"
+        tools:ignore= "Autofill"/>
+
+    <EditText
+        android:id="@+id/editvelocity"
+        android:layout_width="71dp"
+        android:layout_height="57dp"
+        android:text="10"
+        android:ems="10"
+        android:inputType="number"
+        android:hint= "0-19"
+        android:digits="0123456789"
+        android:maxLength="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.482"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.692" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
