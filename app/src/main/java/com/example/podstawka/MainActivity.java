@@ -3,7 +3,12 @@ package com.example.podstawka;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+
+
+import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 
 import android.Manifest;
 import android.app.Activity;
@@ -24,6 +29,7 @@ import android.view.MotionEvent;
 
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,24 +45,68 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+
+import java.net.URI;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.telephony.SmsManager;
+import android.widget.ToggleButton;
+
+
+import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
 import kotlin.jvm.internal.Intrinsics;
 
 public class MainActivity extends AppCompatActivity {
 
-      int speedV,course=1;
-     private Button btnPlus,btnMin,btnSetcourse,btnspeed,btnhelp,btnstart;
-     private TextView CourseText,SpeedText;
-     private EditText editcourse,editSpeed;
+    int speedV,course=1;
+    private Button btnPlus,btnMin,btnSetcourse,btnspeed,btnhelp;
+    private TextView CourseText,SpeedText;
+    private EditText editcourse,editSpeed;
+    private Switch switch1,switch2;
     private TextView AddressText;
+    private ToggleButton tugle1,tugle2;
     //private Button LocationButton;
     private Button launchBTN;
     private LocationRequest locationRequest;
     static double latitude;
     static double longitude;
+    static int frame=0;
+    MqttAndroidClient client;
+    TextView subText;
+    List<String> array=new ArrayList<String>();
+    List<String> array2=new ArrayList<String>();
+
+    private ConstraintLayout containerRL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // containerRL = findViewById(R.id.constrainlayout);
+        //  containerRL.setBackground(getResources().getDrawable(R.drawable.background));
+
+        ToggleButton tugle1=(ToggleButton)findViewById(R.id.toggleButton);
+        ToggleButton tugle2=(ToggleButton)findViewById(R.id.toggleButton2);
+        switch1=findViewById(R.id.switch1);
+        switch2=findViewById(R.id.switch2);
+        String clientId = MqttClient.generateClientId();
+        client = new MqttAndroidClient(this.getApplicationContext(), "tcp://broker.mqttdashboard.com:1883",clientId);
+
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS,Manifest.permission.READ_PHONE_STATE}, PackageManager.PERMISSION_GRANTED);
 
         //buttons
 
@@ -66,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         btnspeed=findViewById(R.id.speed);
         btnSetcourse=findViewById(R.id.setcourse);
         btnhelp=findViewById(R.id.stop);
-        btnstart=findViewById(R.id.start);
+
         //textview
         launchBTN=findViewById(R.id.launch);
         CourseText=findViewById(R.id.CourseAngle);
@@ -77,50 +127,93 @@ public class MainActivity extends AppCompatActivity {
         editSpeed= findViewById(R.id.editvelocity);
 
 
-        editcourse.setFilters(new InputFilter[]{ new InputFilterMinMax("1", "179")});
+        editcourse.setFilters(new InputFilter[]{ new InputFilterMinMax("1", "359")});
 
-       // CourseText.setText(course);
+        offset();
+         tugle1.setEnabled(false);
+        tugle2.setEnabled(false);
+        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    seton();
+                    tugle2.setEnabled(true);
+                }
+                else {
+                    offset();
+                    tugle2.setEnabled(false);
+                }
+            }
+        });
+        switch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    conn();
+                       tugle1.setEnabled(true);
+                }
+                else {
+                     tugle1.setChecked(false);
+                    //disconn();
+                    Toast.makeText(MainActivity.this,"disconnected",Toast.LENGTH_LONG).show();
+
+
+                    tugle1.setEnabled(false);
+                }
+            }
+        });
+        // CourseText.setText(course);
 
         btnPlus.setOnClickListener(new View.OnClickListener() {
-                                       @Override
-                                       public void onClick(View v) {
-                                           course++;
-                                         String course1=Integer.toString(course);
+            @Override
+            public void onClick(View v) {
+                course++;
+                String course1=Integer.toString(course);
 
-                                           if (course==180) btnPlus.setEnabled(false);
-                                           if (course>0) btnMin.setEnabled(true);
-                                           CourseText.setText(course1+" °");
-                                       }
+                if (course==360) btnPlus.setEnabled(false);
+                if (course>0) btnMin.setEnabled(true);
+                CourseText.setText(course1+" °");
+                array.set(0,""+course+","+speedV);
+            }
         });
 
         btnMin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //array.set(0,""+course);
                 course--;
                 String course1=Integer.toString(course);
-                if(course<180) btnPlus.setEnabled(true);
+                if(course<360) btnPlus.setEnabled(true);
                 if (course==0) btnMin.setEnabled(false);
                 CourseText.setText(course1+" °");
-
+                //   array.add(""+course+","+speedV);
+                array.set(0,""+course+","+speedV);
 
             }
         });
-
+        array.add(0,course+","+speedV);
 
         btnSetcourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String course1=editcourse.getText().toString();
-                     course=Integer.valueOf(course1);
-                     CourseText.setText(course1+"°");}
+                course=Integer.valueOf(course1);
+                CourseText.setText(course1+"°");
+                array.set(0,""+course+","+speedV);
+                //  array.set(course,""+speedV);
+            }
+
         });
 
         btnspeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String speed1 = editSpeed.getText().toString();
+                speedV=Integer.valueOf(speed1);
                 SpeedText.setText(" "+speed1+"mph");
+                array.set(0,""+course+","+speedV);
+                //array.set(0+speedV,"");
             }
         });
 
@@ -129,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
         btnhelp.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View arg0, MotionEvent arg1) {
+                getCurrentLocation();
                 switch (arg1.getAction()){
                     case MotionEvent.ACTION_DOWN:
                         handler.postDelayed(run,2000);
@@ -142,29 +236,69 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnstart.setOnClickListener(new View.OnClickListener() {
+
+
+
+// LaunchMap
+        launchBTN.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //switchActivities();
-            }
+            public void onClick(View view) {
+                getCurrentLocation();
+                if (latitude!=0){
+                Intent intent= new Intent (Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("geo:" + latitude + ","  +longitude ));
+                Intent chooser = Intent.createChooser(intent,"Launch Maps");
+                startActivity(chooser);
+            }}
         });
 
 
+        tugle1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+
+                    new Timer().scheduleAtFixedRate(new TimerTask() {
+                        @Override
+                        public void run() {
+                            List<String> array3=new ArrayList<String>();
+                            if (array3==array)
+                            {
 
 
-        launchBTN.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent= new Intent (Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("geo:" + latitude + ","  +longitude ));
-            Intent chooser = Intent.createChooser(intent,"Launch Maps");
-            startActivity(chooser);
-        }
-    });
-    AddressText = findViewById(R.id.addressText);
-    //LocationButton = findViewById(R.id.locationButton);
 
-    locationRequest = LocationRequest.create();
+                            }
+                            else{
+                                published();
+
+                            }
+
+
+                        }
+                    }, 0, 5000);
+
+
+                } else {
+
+                }
+            }
+        });
+        tugle2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    setonCourse();
+                switch2.setEnabled(true);
+            }else {
+                    setoffCourse();
+                switch2.setEnabled(false);
+                }
+            }
+        });
+
+        AddressText = findViewById(R.id.addressText);
+        //LocationButton = findViewById(R.id.locationButton);
+
+        locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(5000);
         locationRequest.setFastestInterval(2000);
@@ -178,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
     });*/
 
 
-}
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -239,7 +373,8 @@ public class MainActivity extends AppCompatActivity {
                                         latitude = locationResult.getLocations().get(index).getLatitude();
                                         longitude = locationResult.getLocations().get(index).getLongitude();
                                         //Long=longitude;
-                                        AddressText.setText("Latitude: "+ latitude + "\n" + "Longitude: "+ longitude);
+                                       // AddressText.setText("Latitude: "+ latitude + "\n" + "Longitude: "+ longitude);
+                                        //AddressText.setText("Latitude: "+ latitude + "\n" + "Longitude: "+ longitude);
                                     }
                                 }
                             }, Looper.getMainLooper());
@@ -292,9 +427,57 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+
+        });
+
+        try {
+            IMqttToken token = client.connect();
+            token.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    Toast.makeText(MainActivity.this,"connected!!",Toast.LENGTH_LONG).show();
+                    setSubscription();
+
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    Toast.makeText(MainActivity.this,"connection failed!!",Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (
+                MqttException e) {
+            e.printStackTrace();
+        }
+
+        client.setCallback(new MqttCallback() {
+            @Override
+            public void connectionLost(Throwable cause) {
+
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+               // array3.set(new String(message.getPayload()));
+                //subText.setText(new String(message.getPayload()));
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+
+            }
         });
 
     }
+
+
+
+
+
+
+
+
+
 
     private boolean isGPSEnabled() {
         LocationManager locationManager = null;
@@ -310,7 +493,139 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void offset()
+    {
+        editcourse.setEnabled(false);
+        editSpeed.setEnabled(false);
+        switch2.setEnabled(false);
+        launchBTN.setEnabled(false);
+        btnPlus.setEnabled(false);
+        btnMin.setEnabled(false);
+        btnspeed.setEnabled(false);
+        btnhelp.setEnabled(false);
+        btnSetcourse.setEnabled(false);
+       // tugle1.setEnabled(false);
+        //tugle2.setEnabled(false);
 
+    }
+
+
+    public void seton()
+    {
+        //editcourse.setEnabled(true);
+        //editSpeed.setEnabled(true);
+      //  switch2.setEnabled(true);
+        launchBTN.setEnabled(true);
+        //btnPlus.setEnabled(true);
+        //btnMin.setEnabled(true);
+        //btnspeed.setEnabled(true);
+        btnhelp.setEnabled(true);
+        //btnSetcourse.setEnabled(true);
+       // tugle2.setEnabled(true);
+    }
+
+
+
+    public void setoffCourse()
+    {
+        editcourse.setEnabled(false);
+        editSpeed.setEnabled(false);
+
+
+        btnPlus.setEnabled(false);
+        btnMin.setEnabled(false);
+        btnspeed.setEnabled(false);
+        // btnhelp.setEnabled(false);
+        btnSetcourse.setEnabled(false);
+
+    }
+
+    public void setonCourse()
+    {
+        editcourse.setEnabled(true);
+        editSpeed.setEnabled(true);
+
+        launchBTN.setEnabled(true);
+        btnPlus.setEnabled(true);
+        btnMin.setEnabled(true);
+        btnspeed.setEnabled(true);
+        //btnhelp.setEnabled(true);
+        btnSetcourse.setEnabled(true);
+
+    }
+    public void published(){
+
+
+        String topic = "event";
+        String message = ""+array;
+        try {
+            client.publish(topic, message.getBytes(),0,false);
+           // Toast.makeText(this,"Published Message",Toast.LENGTH_SHORT).show();
+        } catch ( MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setSubscription(){
+
+        try{
+
+            client.subscribe("event",0);
+
+
+        }catch (MqttException e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
+    public void conn(){
+
+        try {
+            IMqttToken token = client.connect();
+            token.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    Toast.makeText(MainActivity.this,"connected!!",Toast.LENGTH_LONG).show();
+                    setSubscription();
+
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    Toast.makeText(MainActivity.this,"connection failed!!",Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void disconn(){
+
+        try {
+            IMqttToken token = client.disconnect();
+            token.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    Toast.makeText(MainActivity.this,"Disconnected!!",Toast.LENGTH_LONG).show();
+
+
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    Toast.makeText(MainActivity.this,"Could not diconnect!!",Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     Runnable run = new Runnable() {
@@ -318,7 +633,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             getCurrentLocation();
-            Toast.makeText(getApplicationContext(),"Touched",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "you sent an alert message",Toast.LENGTH_SHORT).show();
+            SmsManager mySmsManager = SmsManager.getDefault();
+            mySmsManager.sendTextMessage("018456432543",null, "NEED HELP "+latitude + ","  +longitude, null, null);
 
 
         }

@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:id="@+id/constrainlayout"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
 
 
-
+    <ToggleButton
+        android:id="@+id/toggleButton2"
+        android:layout_width="131dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="264dp"
+        android:shadowColor="#272334"
+        android:text="ToggleButton"
+        android:textOff="START"
+        android:textOn="STOP"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.871"
+        tools:ignore="HardcodedText" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -29,11 +46,11 @@
         android:id="@+id/dimplus"
         android:layout_width="107dp"
         android:layout_height="60dp"
-        android:layout_marginTop="216dp"
+        android:layout_marginTop="200dp"
         android:background="@drawable/round_button"
         android:text="Dim +"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.953"
+        app:layout_constraintHorizontal_bias="0.973"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +58,7 @@
         android:id="@+id/dimminus"
         android:layout_width="118dp"
         android:layout_height="60dp"
-        android:layout_marginTop="216dp"
+        android:layout_marginTop="200dp"
         android:background="@drawable/round_button"
         android:text="Dim -"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,42 +66,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <Button
         android:id="@+id/setcourse"
         android:layout_width="127dp"
         android:layout_height="67dp"
-        android:layout_marginTop="288dp"
+        android:layout_marginTop="280dp"
         android:background="@drawable/round_button"
         android:text="Set Course"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <Button
-        android:id="@+id/start"
-        android:layout_width="134dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="588dp"
-        android:background="@drawable/round_button"
-        android:text="START"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.072"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/stop"
         android:layout_width="143dp"
         android:layout_height="59dp"
-        android:layout_marginTop="584dp"
+        android:layout_marginTop="564dp"
         android:background="@drawable/alarmbutton"
         android:text="HELP!!!"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.917"
+        app:layout_constraintHorizontal_bias="0.97"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -100,33 +104,33 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.027" />
+        app:layout_constraintVertical_bias="0.0" />
+
 
     <TextView
         android:id="@+id/CourseAngle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="180°"
+        android:textColor="#E4DFDF"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
+
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.266" />
-
+        app:layout_constraintVertical_bias="0.24" />
 
     <Button
         android:id="@+id/speed"
         android:layout_width="131dp"
         android:layout_height="67dp"
-        android:layout_marginTop="504dp"
+        android:layout_marginTop="488dp"
         android:background="@drawable/round_button"
         android:text="Set Velocity"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -135,32 +139,35 @@
         android:layout_width="142dp"
         android:layout_height="55dp"
         android:text="   5mph"
+        android:textColor="#D6CBCB"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.572"
 
+        app:layout_constraintHorizontal_bias="0.572"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.573" />
+        app:layout_constraintVertical_bias="0.541" />
 
     <EditText
         android:id="@+id/editcourse"
         android:layout_width="71dp"
-        android:maxLines="1"
-        android:digits="0123456789"
-        android:maxLength="3"
         android:layout_height="57dp"
-        android:text="179"
-        android:inputType="number"
+        android:digits="0123456789"
         android:ems="10"
-        android:hint= "0-180"
+        android:hint="1-360"
+        android:inputType="number"
+        android:maxLength="3"
+        android:maxLines="1"
+        android:text="179"
+        android:textColor="#E6DDDD"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.514"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.342"
-        tools:ignore= "Autofill"/>
+        app:layout_constraintVertical_bias="0.32"
+        tools:ignore="Autofill" />
 
     <EditText
         android:id="@+id/editvelocity"
@@ -172,38 +179,76 @@
         android:inputType="number"
         android:maxLength="2"
         android:text="10"
+        android:textColor="#E8E3E3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.667" />
+        app:layout_constraintVertical_bias="0.624" />
+
 
     <TextView
         android:id="@+id/addressText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="656dp"
         android:text=""
-        android:textColor="@android:color/black"
+        android:textColor="@color/white"
         android:textSize="19sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.871"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.66" />
 
     <Button
         android:id="@+id/launch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="532dp"
+        android:layout_marginTop="632dp"
         android:text="launch map"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="86dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="100dp"
+        android:text="ON/OFF"
+        android:textColor="#EFE6E6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.012"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
+    <Switch
+        android:id="@+id/switch2"
+        android:layout_width="108dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="492dp"
+        android:text="Connect to server"
+        android:textColor="#F1EAEA"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="408dp"
+        android:layout_marginEnd="292dp"
+        android:shadowColor="#272334"
+        android:text="ToggleButton"
+        android:textOff="SEND"
+        android:textOn="DOWNLOAD"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
