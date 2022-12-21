@@ -14,9 +14,9 @@
 
     <ToggleButton
         android:id="@+id/toggleButton2"
-        android:layout_width="131dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="264dp"
+        android:layout_width="135dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="272dp"
         android:shadowColor="#272334"
         android:text="ToggleButton"
         android:textOff="START"
@@ -24,33 +24,49 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.871"
+        app:layout_constraintVertical_bias="0.825"
         tools:ignore="HardcodedText" />
 
     <ImageView
         android:id="@+id/imageView"
 
-        android:layout_width="62dp"
-        android:layout_height="59dp"
+        android:layout_width="39dp"
+        android:layout_height="47dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="TODO"
         android:foregroundGravity="clip_horizontal"
         android:src="@drawable/android"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"
-        android:contentDescription="TODO" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/dimplus"
         android:layout_width="107dp"
         android:layout_height="60dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="128dp"
         android:background="@drawable/round_button"
-        android:text="Dim +"
+        android:text="+"
+        android:textSize="27sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.973"
+        app:layout_constraintHorizontal_bias="0.976"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/plusspeed"
+        android:layout_width="104dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="252dp"
+        android:background="@drawable/round_button"
+        android:scrollbarSize="4dp"
+        android:text="+"
+        android:textSize="27sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.977"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,26 +74,39 @@
         android:id="@+id/dimminus"
         android:layout_width="118dp"
         android:layout_height="60dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="120dp"
         android:background="@drawable/round_button"
-        android:text="Dim -"
+        android:text="-"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.013"
+        app:layout_constraintHorizontal_bias="0.003"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/minspeed"
+        android:layout_width="114dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="248dp"
+        android:background="@drawable/round_button"
+        android:text="-"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.023"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/setcourse"
-        android:layout_width="127dp"
-        android:layout_height="67dp"
-        android:layout_marginTop="280dp"
+        android:layout_width="138dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="180dp"
         android:background="@drawable/round_button"
         android:text="Set Course"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <Button
         android:id="@+id/stop"
@@ -92,20 +121,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <ImageView
         android:id="@+id/arrow"
 
-        android:layout_width="174dp"
-        android:layout_height="149dp"
+        android:layout_width="98dp"
+        android:layout_height="76dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="116dp"
+        android:layout_marginStart="160dp"
         android:foregroundGravity="clip_horizontal"
         android:src="@drawable/ic_baseline_navigation_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
-
 
     <TextView
         android:id="@+id/CourseAngle"
@@ -116,20 +145,20 @@
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.531"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.24" />
+        app:layout_constraintVertical_bias="0.112" />
 
     <Button
         android:id="@+id/speed"
-        android:layout_width="131dp"
-        android:layout_height="67dp"
-        android:layout_marginTop="488dp"
+        android:layout_width="129dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="324dp"
         android:background="@drawable/round_button"
         android:text="Set Velocity"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -138,16 +167,16 @@
         android:id="@+id/textSpeed"
         android:layout_width="142dp"
         android:layout_height="55dp"
-        android:text="   5mph"
+        android:text="   5kmh"
         android:textColor="#D6CBCB"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintHorizontal_bias="0.572"
+        app:layout_constraintHorizontal_bias="0.576"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.541" />
+        app:layout_constraintVertical_bias="0.372" />
 
     <EditText
         android:id="@+id/editcourse"
@@ -163,10 +192,10 @@
         android:textColor="#E6DDDD"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.514"
+        app:layout_constraintHorizontal_bias="0.547"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32"
+        app:layout_constraintVertical_bias="0.191"
         tools:ignore="Autofill" />
 
     <EditText
@@ -182,10 +211,10 @@
         android:textColor="#E8E3E3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.547"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.624" />
-
+        app:layout_constraintVertical_bias="0.416" />
 
     <TextView
         android:id="@+id/addressText"
@@ -208,7 +237,7 @@
         android:layout_marginTop="632dp"
         android:text="launch map"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintHorizontal_bias="0.458"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -216,11 +245,11 @@
         android:id="@+id/switch1"
         android:layout_width="86dp"
         android:layout_height="49dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="56dp"
         android:text="ON/OFF"
         android:textColor="#EFE6E6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.012"
+        app:layout_constraintHorizontal_bias="0.003"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -229,12 +258,12 @@
         android:id="@+id/switch2"
         android:layout_width="108dp"
         android:layout_height="70dp"
-        android:layout_marginTop="492dp"
+        android:layout_marginTop="464dp"
         android:text="Connect to server"
         android:textColor="#F1EAEA"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintHorizontal_bias="0.003"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -243,8 +272,8 @@
         android:id="@+id/toggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="408dp"
-        android:layout_marginEnd="292dp"
+        android:layout_marginTop="416dp"
+        android:layout_marginEnd="316dp"
         android:shadowColor="#272334"
         android:text="ToggleButton"
         android:textOff="SEND"

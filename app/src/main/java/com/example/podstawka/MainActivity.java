@@ -8,7 +8,6 @@ import androidx.core.app.ActivityCompat;
 
 
 import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
 
 import android.Manifest;
 import android.app.Activity;
@@ -21,7 +20,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.text.Editable;
 import android.text.InputFilter;
 import android.view.View;
 import android.os.Handler;
@@ -46,16 +44,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 
-import java.net.URI;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.telephony.SmsManager;
 import android.widget.ToggleButton;
 
@@ -69,12 +62,11 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import kotlin.jvm.internal.Intrinsics;
-
 public class MainActivity extends AppCompatActivity {
 
-    int speedV,course=1;
+    int speedV=5,course=1;
     private Button btnPlus,btnMin,btnSetcourse,btnspeed,btnhelp;
+    private Button speedPlus,speedMin;
     private TextView CourseText,SpeedText;
     private EditText editcourse,editSpeed;
     private Switch switch1,switch2;
@@ -110,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
 
         //buttons
 
+        speedMin=findViewById(R.id.minspeed);
+        speedPlus=findViewById(R.id.plusspeed);
 
         btnPlus = findViewById(R.id.dimplus);
         btnMin=findViewById(R.id.dimminus);
@@ -180,17 +174,43 @@ public class MainActivity extends AppCompatActivity {
         btnMin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //array.set(0,""+course);
                 course--;
                 String course1=Integer.toString(course);
                 if(course<360) btnPlus.setEnabled(true);
                 if (course==0) btnMin.setEnabled(false);
                 CourseText.setText(course1+" °");
-                //   array.add(""+course+","+speedV);
                 array.set(0,""+course+","+speedV);
 
             }
         });
+
+       speedMin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speedV--;
+                String speed=Integer.toString(speedV);
+                if(speedV<20) speedPlus.setEnabled(true);
+                if (speedV==0) speedMin.setEnabled(false);
+                SpeedText.setText(speed+" kmh");
+                array.set(0,""+course+","+speedV);
+
+            }
+        });
+
+        speedPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speedV++;
+                String speed=Integer.toString(speedV);
+                if(speedV==20) speedPlus.setEnabled(false);
+                if (speedV>0) speedMin.setEnabled(true);
+                SpeedText.setText(speed+" kmh");
+                array.set(0,""+course+","+speedV);
+
+            }
+        });
+
+
         array.add(0,course+","+speedV);
 
         btnSetcourse.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String speed1 = editSpeed.getText().toString();
                 speedV=Integer.valueOf(speed1);
-                SpeedText.setText(" "+speed1+"mph");
+                SpeedText.setText(" "+speed1+"kmh");
                 array.set(0,""+course+","+speedV);
                 //array.set(0+speedV,"");
             }
@@ -287,10 +307,10 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     setonCourse();
-                switch2.setEnabled(true);
+               // switch2.setEnabled(true);
             }else {
                     setoffCourse();
-                switch2.setEnabled(false);
+               // switch2.setEnabled(false);
                 }
             }
         });
@@ -516,6 +536,7 @@ public class MainActivity extends AppCompatActivity {
         //editSpeed.setEnabled(true);
       //  switch2.setEnabled(true);
         launchBTN.setEnabled(true);
+        switch2.setEnabled(true);
         //btnPlus.setEnabled(true);
         //btnMin.setEnabled(true);
         //btnspeed.setEnabled(true);
