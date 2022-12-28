@@ -62,6 +62,27 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     int speedV=5,course=1;
@@ -82,7 +103,17 @@ public class MainActivity extends AppCompatActivity {
     TextView subText;
     List<String> array=new ArrayList<String>();
     List<String> array2=new ArrayList<String>();
+    private static final int REQUEST_CODE_SEND_SMS = 1;
+    private static final int REQUEST_CODE_ADD_ITEM = 2;
+    private static final int REQUEST_CODE_READ_PHONE_STATE =3 ;
+    private static ArrayList<String> items = new ArrayList<>();
 
+
+    private Button editListButton;
+    private Button sendSmsButton;
+    private ListView listView;
+
+    private ArrayAdapter<String> adapter;
     private ConstraintLayout containerRL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +131,27 @@ public class MainActivity extends AppCompatActivity {
 
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS,Manifest.permission.READ_PHONE_STATE}, PackageManager.PERMISSION_GRANTED);
 
+
+
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, REQUEST_CODE_SEND_SMS);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_CODE_READ_PHONE_STATE);
+        }
+        setContentView(R.layout.activity_main);
+
+
         //buttons
+
+
+
+        //listView = findViewById(R.id.listView);
+        editListButton = findViewById(R.id.editListButton);
+        //sendSmsButton = findViewById(R.id.sendSmsButton);
 
         speedMin=findViewById(R.id.minspeed);
         speedPlus=findViewById(R.id.plusspeed);
@@ -331,6 +382,31 @@ public class MainActivity extends AppCompatActivity {
         }
     });*/
 
+        if (getIntent().hasExtra("items")) {
+            items = (ArrayList<String>) getIntent().getSerializableExtra("items");
+        } else {
+            items = new ArrayList<>();
+        }
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        // listView.setAdapter(adapter);
+        if (items != null && !items.isEmpty()) {
+            if (items == null || items.isEmpty()) {
+                Toast.makeText(this, "Lista numerów jest pusta", Toast.LENGTH_SHORT).show();
+                return;
+            }}
+        editListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ListActivity.class);
+                // intent.putExtra("items", items);
+                startActivityForResult(intent, REQUEST_CODE_ADD_ITEM);
+            }
+        });
+
+
+
+
 
     }
 
@@ -351,6 +427,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        if (requestCode == REQUEST_CODE_SEND_SMS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Uprawnienia zostały udzielone", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Uprawnienia nie zostały udzielone", Toast.LENGTH_SHORT).show();
+            }
+        }
 
 
     }
@@ -364,6 +447,9 @@ public class MainActivity extends AppCompatActivity {
 
                 getCurrentLocation();
             }
+        }
+        if (requestCode == REQUEST_CODE_ADD_ITEM && resultCode == RESULT_OK) {
+            items = data.getStringArrayListExtra("items");
         }
     }
 
@@ -654,13 +740,29 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             getCurrentLocation();
-            Toast.makeText(getApplicationContext(), "you sent an alert message",Toast.LENGTH_SHORT).show();
-            SmsManager mySmsManager = SmsManager.getDefault();
-            mySmsManager.sendTextMessage("018456432543",null, "NEED HELP "+latitude + ","  +longitude, null, null);
-
+            sendSms();
 
         }
     };
+
+
+
+
+    private void sendSms() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Użytkownik nie ma uprawnień", Toast.LENGTH_SHORT).show();
+        } else{
+            if (items != null && !items.isEmpty()) {
+                SmsManager smsManager = SmsManager.getDefault();
+                for (String number : items) {
+                    smsManager.sendTextMessage(number, null, "NEED HELP "+latitude + ","  +longitude, null, null);
+                }
+                Toast.makeText(this, "Wiadomość została wysłana", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Lista numerów jest pusta", Toast.LENGTH_SHORT).show();
+            }}
+    }
 }
 
 
