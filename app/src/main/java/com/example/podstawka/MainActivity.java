@@ -5,8 +5,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 
 import android.Manifest;
@@ -27,6 +29,7 @@ import android.view.MotionEvent;
 
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,29 +65,9 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.telephony.SmsManager;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_ADD_ITEM =1 ;
     int speedV=5,course=1;
     private Button btnPlus,btnMin,btnSetcourse,btnspeed,btnhelp;
     private Button speedPlus,speedMin;
@@ -103,9 +86,7 @@ public class MainActivity extends AppCompatActivity {
     TextView subText;
     List<String> array=new ArrayList<String>();
     List<String> array2=new ArrayList<String>();
-    private static final int REQUEST_CODE_SEND_SMS = 1;
-    private static final int REQUEST_CODE_ADD_ITEM = 2;
-    private static final int REQUEST_CODE_READ_PHONE_STATE =3 ;
+
     private static ArrayList<String> items = new ArrayList<>();
 
 
@@ -115,6 +96,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayAdapter<String> adapter;
     private ConstraintLayout containerRL;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,25 +117,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, REQUEST_CODE_SEND_SMS);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_CODE_READ_PHONE_STATE);
-        }
-        setContentView(R.layout.activity_main);
+        editListButton = findViewById(R.id.editListButton);
 
 
         //buttons
-
-
-
-        //listView = findViewById(R.id.listView);
-        editListButton = findViewById(R.id.editListButton);
-        //sendSmsButton = findViewById(R.id.sendSmsButton);
 
         speedMin=findViewById(R.id.minspeed);
         speedPlus=findViewById(R.id.plusspeed);
@@ -404,11 +373,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
     }
+
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -425,13 +393,6 @@ public class MainActivity extends AppCompatActivity {
 
                     turnOnGPS();
                 }
-            }
-        }
-        if (requestCode == REQUEST_CODE_SEND_SMS) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Uprawnienia zostały udzielone", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Uprawnienia nie zostały udzielone", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -452,6 +413,8 @@ public class MainActivity extends AppCompatActivity {
             items = data.getStringArrayListExtra("items");
         }
     }
+
+
 
     private void getCurrentLocation() {
 
@@ -689,6 +652,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     public void conn(){
 
         try {
@@ -734,20 +699,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    Runnable run = new Runnable() {
-
-        @Override
-        public void run() {
-            getCurrentLocation();
-            sendSms();
-
-        }
-    };
-
-
-
-
     private void sendSms() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -763,6 +714,19 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Lista numerów jest pusta", Toast.LENGTH_SHORT).show();
             }}
     }
+
+
+
+
+    Runnable run = new Runnable() {
+
+        @Override
+        public void run() {
+            getCurrentLocation();
+           sendSms();
+
+        }
+    };
 }
 
 
