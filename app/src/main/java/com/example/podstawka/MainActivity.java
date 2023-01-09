@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     List<String> array2=new ArrayList<String>();
 
     private static ArrayList<String> items = new ArrayList<>();
-
+    static String zmienna ;
 
     private Button editListButton;
     private Button sendSmsButton;
@@ -152,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
                 if (isChecked) {
                     seton();
                     tugle2.setEnabled(true);
+
+
                 }
                 else {
                     offset();
@@ -165,6 +167,40 @@ public class MainActivity extends AppCompatActivity {
                 if (isChecked) {
                     conn();
                        tugle1.setEnabled(true);
+
+
+                    client.setCallback(new MqttCallback() {
+                        @Override
+                        public void connectionLost(Throwable cause) {
+
+                        }
+
+                        @Override
+                        public void messageArrived(String topic, MqttMessage message) throws Exception {
+                            zmienna=new String(message.getPayload());//dziala
+                           // subText.setText(zmienna);//razem z tym
+                           String[] elementy=zmienna.split(",");
+                            // byte[] charactersArray = message.getPayload();
+
+                            //  subText.setText(charactersArray[0]);
+                            // subText2.setText(charactersArray[1]);
+
+                            //array3.set(0,new String(message.getPayload()));
+                            // array3.set(1,zmienna+"");
+                            // array3.add(1,zmienna);
+                           if (elementy.length >= 2) {
+
+                               CourseText.setText(elementy[0]+"°");
+
+                                SpeedText.setText(elementy[1]+"kmh");
+                               }
+                        }
+
+                        @Override
+                        public void deliveryComplete(IMqttDeliveryToken token) {
+
+                        }
+                    });
                 }
                 else {
                      tugle1.setChecked(false);
@@ -499,43 +535,8 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        try {
-            IMqttToken token = client.connect();
-            token.setActionCallback(new IMqttActionListener() {
-                @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    Toast.makeText(MainActivity.this,"connected!!",Toast.LENGTH_LONG).show();
-                    setSubscription();
 
-                }
 
-                @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Toast.makeText(MainActivity.this,"connection failed!!",Toast.LENGTH_LONG).show();
-                }
-            });
-        } catch (
-                MqttException e) {
-            e.printStackTrace();
-        }
-
-        client.setCallback(new MqttCallback() {
-            @Override
-            public void connectionLost(Throwable cause) {
-
-            }
-
-            @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
-               // array3.set(new String(message.getPayload()));
-                //subText.setText(new String(message.getPayload()));
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken token) {
-
-            }
-        });
 
     }
 
@@ -573,6 +574,11 @@ public class MainActivity extends AppCompatActivity {
         btnspeed.setEnabled(false);
         btnhelp.setEnabled(false);
         btnSetcourse.setEnabled(false);
+        speedMin.setEnabled(true);
+        speedMin.setEnabled(true);
+        speedMin.setEnabled(false);
+        speedPlus.setEnabled(false);
+        editListButton.setEnabled(false);
        // tugle1.setEnabled(false);
         //tugle2.setEnabled(false);
 
@@ -590,6 +596,7 @@ public class MainActivity extends AppCompatActivity {
         //btnMin.setEnabled(true);
         //btnspeed.setEnabled(true);
         btnhelp.setEnabled(true);
+        editListButton.setEnabled(true);
         //btnSetcourse.setEnabled(true);
        // tugle2.setEnabled(true);
     }
@@ -607,7 +614,8 @@ public class MainActivity extends AppCompatActivity {
         btnspeed.setEnabled(false);
         // btnhelp.setEnabled(false);
         btnSetcourse.setEnabled(false);
-
+        speedMin.setEnabled(false);
+        speedPlus.setEnabled(false);
     }
 
     public void setonCourse()
@@ -621,7 +629,8 @@ public class MainActivity extends AppCompatActivity {
         btnspeed.setEnabled(true);
         //btnhelp.setEnabled(true);
         btnSetcourse.setEnabled(true);
-
+        speedMin.setEnabled(true);
+        speedPlus.setEnabled(true);
     }
     public void published(){
 
