@@ -12,6 +12,21 @@
     tools:context=".MainActivity">
 
 
+    <TextView
+        android:id="@+id/textSpeed2"
+        android:layout_width="142dp"
+        android:layout_height="55dp"
+        android:text="   5kmh"
+        android:textColor="#D6CBCB"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.639"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.427" />
+
     <ToggleButton
         android:id="@+id/toggleButton2"
         android:layout_width="135dp"
@@ -133,19 +148,36 @@
         app:layout_constraintStart_toStartOf="@+id/toggleButton"
         tools:ignore="MissingConstraints" />
 
+
     <TextView
         android:id="@+id/CourseAngle"
-        android:layout_width="89dp"
-        android:layout_height="57dp"
+        android:layout_width="108dp"
+        android:layout_height="81dp"
         android:text="180°"
         android:textColor="#E4DFDF"
-        android:textSize="40sp"
+        android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
 
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.093" />
+        app:layout_constraintVertical_bias="0.045" />
+
+    <TextView
+        android:id="@+id/CourseAngle2"
+        android:layout_width="93dp"
+        android:layout_height="59dp"
+        android:text="180°"
+        android:textColor="#E4DFDF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.565"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.163" />
 
     <Button
         android:id="@+id/speed"
@@ -166,14 +198,14 @@
         android:layout_height="55dp"
         android:text="   5kmh"
         android:textColor="#D6CBCB"
-        android:textSize="25sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintHorizontal_bias="0.576"
+        app:layout_constraintHorizontal_bias="0.605"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.372" />
+        app:layout_constraintVertical_bias="0.357" />
 
     <EditText
         android:id="@+id/editcourse"
@@ -189,10 +221,10 @@
         android:textColor="#E6DDDD"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.547"
+        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.191"
+        app:layout_constraintVertical_bias="0.204"
         tools:ignore="Autofill" />
 
     <EditText
@@ -208,10 +240,10 @@
         android:textColor="#E8E3E3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.547"
+        app:layout_constraintHorizontal_bias="0.558"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.416" />
+        app:layout_constraintVertical_bias="0.44" />
 
     <TextView
         android:id="@+id/addressText"

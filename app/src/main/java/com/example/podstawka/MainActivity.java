@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 
@@ -69,9 +70,12 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_ADD_ITEM =1 ;
     int speedV=5,course=1;
+    int speedV2=5, courseV2=1;
+
+
     private Button btnPlus,btnMin,btnSetcourse,btnspeed,btnhelp;
     private Button speedPlus,speedMin;
-    private TextView CourseText,SpeedText;
+    private TextView CourseText,SpeedText,CourseText2,SpeedText2;
     private EditText editcourse,editSpeed;
     private Switch switch1,switch2;
     private TextView AddressText;
@@ -80,13 +84,16 @@ public class MainActivity extends AppCompatActivity {
     private Button launchBTN;
     private LocationRequest locationRequest;
     static double latitude;
+
+    private static final String TAG = "MyActivity";
+
     static double longitude;
     static int frame=0;
     MqttAndroidClient client;
     TextView subText;
     List<String> array=new ArrayList<String>();
     List<String> array2=new ArrayList<String>();
-
+    String wys;
     private static ArrayList<String> items = new ArrayList<>();
     static String zmienna ;
 
@@ -113,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
         String clientId = MqttClient.generateClientId();
         client = new MqttAndroidClient(this.getApplicationContext(), "tcp://broker.mqttdashboard.com:1883",clientId);
 
+
+        // do grzesia
+        //String clientId = "shiprpi";
+       // client = new MqttAndroidClient(this.getApplicationContext(), "tcp://192.168.10.1:1883",clientId);
+
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS,Manifest.permission.READ_PHONE_STATE}, PackageManager.PERMISSION_GRANTED);
 
 
@@ -135,6 +147,10 @@ public class MainActivity extends AppCompatActivity {
         launchBTN=findViewById(R.id.launch);
         CourseText=findViewById(R.id.CourseAngle);
         SpeedText=findViewById(R.id.textSpeed);
+        CourseText2=findViewById(R.id.CourseAngle2);
+        SpeedText2=findViewById(R.id.textSpeed2);
+
+
 
         //edittext
         editcourse=findViewById(R.id.editcourse);
@@ -173,13 +189,44 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void connectionLost(Throwable cause) {
 
+
                         }
+
+
+                        String topic2 = "/ship/data/heading";// odbierana kurs
+                        int messcourse = courseV2;
+                        String topic3 = "/ship/data/speed";// odbierana kurs
+                        int messspeed = speedV2;
 
                         @Override
                         public void messageArrived(String topic, MqttMessage message) throws Exception {
-                            zmienna=new String(message.getPayload());//dziala
-                           // subText.setText(zmienna);//razem z tym
-                           String[] elementy=zmienna.split(",");
+
+
+
+                           if (topic.equalsIgnoreCase("/ship/data/speed")) {
+                               Log.i(TAG, "topic" +topic);
+                            zmienna = new String(message.getPayload());//dziala
+                            SpeedText.setText(zmienna);
+                            }
+
+                            if (topic.equalsIgnoreCase("/ship/data/heading")) {
+                                Log.i(TAG, "topic" +topic);
+                                String zmienna2 = new String(message.getPayload());//dziala
+                                CourseText.setText(zmienna2);
+                            }
+                           
+                           /*
+                            if (topic==topic3) {
+
+                                String zmienna2 = new String(message.getPayload());//dziala
+                                SpeedText.setText(zmienna2);
+                            }
+*/
+                           ///zmienna = new String(message.getPayload());//dziala
+                          //  CourseText.setText(zmienna);
+                            // subText.setText(zmienna);//razem z tym
+                            //String[] elementy = zmienna.split(",");
+
                             // byte[] charactersArray = message.getPayload();
 
                             //  subText.setText(charactersArray[0]);
@@ -188,16 +235,25 @@ public class MainActivity extends AppCompatActivity {
                             //array3.set(0,new String(message.getPayload()));
                             // array3.set(1,zmienna+"");
                             // array3.add(1,zmienna);
-                           if (elementy.length >= 2) {
+                         //   if (elementy.length >= 2) {
+                            //    CourseText.setText(elementy[0] + "°");
+                              ///  courseV2 = Integer.parseInt(elementy[0]);
+                             //   SpeedText.setText(elementy[1] + "kmh");
+                               // speedV2 = Integer.parseInt(elementy[1]);
 
-                               CourseText.setText(elementy[0]+"°");
+                          //  }
 
-                                SpeedText.setText(elementy[1]+"kmh");
-                               }
-                        }
 
+
+                       // zmienna=new
+
+                        //String(message.getPayload());
+
+                    }
                         @Override
                         public void deliveryComplete(IMqttDeliveryToken token) {
+
+
 
                         }
                     });
@@ -222,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (course==360) btnPlus.setEnabled(false);
                 if (course>0) btnMin.setEnabled(true);
-                CourseText.setText(course1+" °");
+                CourseText2.setText(course1+" °");
                 array.set(0,""+course+","+speedV);
             }
         });
@@ -234,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
                 String course1=Integer.toString(course);
                 if(course<360) btnPlus.setEnabled(true);
                 if (course==0) btnMin.setEnabled(false);
-                CourseText.setText(course1+" °");
+                CourseText2.setText(course1+" °");
                 array.set(0,""+course+","+speedV);
 
             }
@@ -247,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
                 String speed=Integer.toString(speedV);
                 if(speedV<20) speedPlus.setEnabled(true);
                 if (speedV==0) speedMin.setEnabled(false);
-                SpeedText.setText(speed+" kmh");
+                SpeedText2.setText(speed+" kmh");
                 array.set(0,""+course+","+speedV);
 
             }
@@ -260,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
                 String speed=Integer.toString(speedV);
                 if(speedV==20) speedPlus.setEnabled(false);
                 if (speedV>0) speedMin.setEnabled(true);
-                SpeedText.setText(speed+" kmh");
+                SpeedText2.setText(speed+" kmh");
                 array.set(0,""+course+","+speedV);
 
             }
@@ -275,8 +331,9 @@ public class MainActivity extends AppCompatActivity {
 
                 String course1=editcourse.getText().toString();
                 course=Integer.valueOf(course1);
-                CourseText.setText(course1+"°");
+                CourseText2.setText(course1+"°");
                 array.set(0,""+course+","+speedV);
+                //wys=course+speedV;
                 //  array.set(course,""+speedV);
             }
 
@@ -287,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String speed1 = editSpeed.getText().toString();
                 speedV=Integer.valueOf(speed1);
-                SpeedText.setText(" "+speed1+"kmh");
+                SpeedText2.setText(" "+speed1+"kmh");
                 array.set(0,""+course+","+speedV);
                 //array.set(0+speedV,"");
             }
@@ -635,11 +692,19 @@ public class MainActivity extends AppCompatActivity {
     public void published(){
 
 
-        String topic = "event";
-        String message = ""+array;
+       // String topic = "event";
+        //String message = ""+array;
+
+        String topic4="/ship/control/set_heading";// wysylłany kurs
+        String mes1course=Integer.toString(course);
+        String topic5="/ship/control/speed";// wysyłana prędkosść
+        String mes1speed=Integer.toString(speedV);
         try {
-            client.publish(topic, message.getBytes(),0,false);
-           // Toast.makeText(this,"Published Message",Toast.LENGTH_SHORT).show();
+            client.publish(topic4, mes1course.getBytes(),0,false);
+            client.publish(topic5, mes1speed.getBytes(),0,false);
+
+
+            // Toast.makeText(this,"Published Message",Toast.LENGTH_SHORT).show();
         } catch ( MqttException e) {
             e.printStackTrace();
         }
@@ -649,7 +714,10 @@ public class MainActivity extends AppCompatActivity {
 
         try{
 
-            client.subscribe("event",0);
+            client.subscribe("/ship/data/heading",0);
+            client.subscribe("/ship/data/speed",0);
+            client.subscribe("fds",0);
+
 
 
         }catch (MqttException e){
