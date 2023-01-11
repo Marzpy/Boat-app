@@ -40,8 +40,7 @@ public class ListActivity extends AppCompatActivity {
     private  ArrayList<String> items = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private static Set<String> selectedItems = new HashSet<>();
-    //private List<String> nonRemovableItems = Arrays.asList("112");
-    // private List<String> nonRemovableItems = Arrays.asList("6");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,21 +55,14 @@ public class ListActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        // Dodajemy elementy do listy
-        //items.add("997");
-        //items.add("112");
-        //items.add("532");
 
 
 
-        // items.addAll(nonRemovableItems);
-
-        // Pobierz zapisane elementy z SharedPreferences
         SharedPreferences sharedPref = getSharedPreferences("items", MODE_PRIVATE);
         Set<String> savedItems = sharedPref.getStringSet("items", new HashSet<String>());
         items.addAll(savedItems);
 
-        // Pobierz zapisane zaznaczone elementy z SharedPreferences
+
         SharedPreferences sharedPref2 = getSharedPreferences("selected_items", MODE_PRIVATE);
         selectedItems = sharedPref2.getStringSet("selected_items", new HashSet<String>());
 
@@ -95,7 +87,7 @@ public class ListActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Sprawdź czy nowy element składa się tylko z cyfr
+
                 boolean isNumber = true;
                 for (int i = 0; i < newItem.length(); i++) {
                     if (!Character.isDigit(newItem.charAt(i))) {
@@ -124,7 +116,7 @@ public class ListActivity extends AppCompatActivity {
                     if (checked.valueAt(i)) {
 
 
-                        // orignalnie selectedItems.add(items.get(position));
+
                         if (position < items.size()) {
                             String element = items.get(position);  // tutaj pobieramy element z listy
                             selectedItems.add(element);
