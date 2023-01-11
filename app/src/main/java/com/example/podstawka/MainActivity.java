@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout containerRL;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,13 +116,12 @@ public class MainActivity extends AppCompatActivity {
         ToggleButton tugle2=(ToggleButton)findViewById(R.id.toggleButton2);
         switch1=findViewById(R.id.switch1);
         switch2=findViewById(R.id.switch2);
-        String clientId = MqttClient.generateClientId();
-        client = new MqttAndroidClient(this.getApplicationContext(), "tcp://broker.mqttdashboard.com:1883",clientId);
-
+       // String clientId = MqttClient.generateClientId();
+        //client = new MqttAndroidClient(this.getApplicationContext(), "tcp://broker.mqttdashboard.com:1883",clientId);
 
         // do grzesia
-        //String clientId = "shiprpi";
-       // client = new MqttAndroidClient(this.getApplicationContext(), "tcp://192.168.10.1:1883",clientId);
+         String clientId = "shiprpi";
+        client = new MqttAndroidClient(this.getApplicationContext(), "tcp://192.168.10.1:1883",clientId);
 
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS,Manifest.permission.READ_PHONE_STATE}, PackageManager.PERMISSION_GRANTED);
 
@@ -215,39 +213,7 @@ public class MainActivity extends AppCompatActivity {
                                 CourseText.setText(zmienna2);
                             }
                            
-                           /*
-                            if (topic==topic3) {
 
-                                String zmienna2 = new String(message.getPayload());//dziala
-                                SpeedText.setText(zmienna2);
-                            }
-*/
-                           ///zmienna = new String(message.getPayload());//dziala
-                          //  CourseText.setText(zmienna);
-                            // subText.setText(zmienna);//razem z tym
-                            //String[] elementy = zmienna.split(",");
-
-                            // byte[] charactersArray = message.getPayload();
-
-                            //  subText.setText(charactersArray[0]);
-                            // subText2.setText(charactersArray[1]);
-
-                            //array3.set(0,new String(message.getPayload()));
-                            // array3.set(1,zmienna+"");
-                            // array3.add(1,zmienna);
-                         //   if (elementy.length >= 2) {
-                            //    CourseText.setText(elementy[0] + "°");
-                              ///  courseV2 = Integer.parseInt(elementy[0]);
-                             //   SpeedText.setText(elementy[1] + "kmh");
-                               // speedV2 = Integer.parseInt(elementy[1]);
-
-                          //  }
-
-
-
-                       // zmienna=new
-
-                        //String(message.getPayload());
 
                     }
                         @Override
@@ -268,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        // CourseText.setText(course);
+
 
         btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -692,8 +658,7 @@ public class MainActivity extends AppCompatActivity {
     public void published(){
 
 
-       // String topic = "event";
-        //String message = ""+array;
+
 
         String topic4="/ship/control/set_heading";// wysylłany kurs
         String mes1course=Integer.toString(course);
@@ -704,7 +669,7 @@ public class MainActivity extends AppCompatActivity {
             client.publish(topic5, mes1speed.getBytes(),0,false);
 
 
-            // Toast.makeText(this,"Published Message",Toast.LENGTH_SHORT).show();
+
         } catch ( MqttException e) {
             e.printStackTrace();
         }
