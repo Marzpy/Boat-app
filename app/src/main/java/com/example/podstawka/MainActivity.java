@@ -100,10 +100,12 @@ public class MainActivity extends AppCompatActivity {
     private Button editListButton;
     private Button sendSmsButton;
     private ListView listView;
-
+private Timer timer;
+private TimerTask timerTask;
     private ArrayAdapter<String> adapter;
     private ConstraintLayout containerRL;
 
+    private boolean toggleButtonState=false;
 
 
     @Override
@@ -388,30 +390,18 @@ public class MainActivity extends AppCompatActivity {
 
         tugle1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-
-                    new Timer().scheduleAtFixedRate(new TimerTask() {
-                        @Override
+                toggleButtonState = isChecked;
+                if (toggleButtonState) {
+                    timer = new Timer();
+                    timerTask = new TimerTask() {
                         public void run() {
-                            List<String> array3=new ArrayList<String>();
-                            if (array3==array)
-                            {
-
-
-
-                            }
-                            else{
-                                published();
-
-                            }
-
-
+                            // tutaj kod, który ma być wykonywany co 5 sekund
+                            published();
                         }
-                    }, 0, 5000);
-
-
+                    };
+                    timer.scheduleAtFixedRate(timerTask, 0, 5000);
                 } else {
-
+                    timerTask.cancel();
                 }
             }
         });
