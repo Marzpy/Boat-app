@@ -16,7 +16,7 @@
         android:id="@+id/textSpeed2"
         android:layout_width="142dp"
         android:layout_height="55dp"
-        android:text="   5kmh"
+        android:text="   15kmh"
         android:textColor="#D6CBCB"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -146,7 +146,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintStart_toStartOf="@+id/toggleButton"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints,UnknownId" />
 
 
     <TextView
@@ -233,7 +233,7 @@
         android:layout_height="57dp"
         android:digits="0123456789"
         android:ems="10"
-        android:hint="0-19"
+        android:hint="0-15"
         android:inputType="number"
         android:maxLength="2"
         android:text="10"
@@ -297,16 +297,4 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="416dp"
-        android:layout_marginEnd="316dp"
-        android:shadowColor="#272334"
-        android:text="ToggleButton"
-        android:textOff="SEND"
-        android:textOn="DOWNLOAD"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -48,7 +48,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -79,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText editcourse,editSpeed;
     private Switch switch1,switch2;
     private TextView AddressText;
-    private ToggleButton tugle1,tugle2;
+    private boolean toggleButtonState = false;
+    private ToggleButton tugle2;
     //private Button LocationButton;
     private Button launchBTN;
     private LocationRequest locationRequest;
@@ -105,7 +111,7 @@ private TimerTask timerTask;
     private ArrayAdapter<String> adapter;
     private ConstraintLayout containerRL;
 
-    private boolean toggleButtonState=false;
+    //private boolean toggleButtonState=false;
 
 
     @Override
@@ -115,17 +121,17 @@ private TimerTask timerTask;
         // containerRL = findViewById(R.id.constrainlayout);
         //  containerRL.setBackground(getResources().getDrawable(R.drawable.background));
 
-        ToggleButton tugle1=(ToggleButton)findViewById(R.id.toggleButton);
+        //ToggleButton tugle1=(ToggleButton)findViewById(R.id.toggleButton);
         ToggleButton tugle2=(ToggleButton)findViewById(R.id.toggleButton2);
         switch1=findViewById(R.id.switch1);
         switch2=findViewById(R.id.switch2);
-        String clientId = MqttClient.generateClientId();
-        client = new MqttAndroidClient(this.getApplicationContext(), "tcp://broker.mqttdashboard.com:1883",clientId);
+       // String clientId = MqttClient.generateClientId();
+        //client = new MqttAndroidClient(this.getApplicationContext(), "tcp://broker.mqttdashboard.com:1883",clientId);
 
 
         // do grzesia
-        //String clientId = "shiprpi";
-       // client = new MqttAndroidClient(this.getApplicationContext(), "tcp://192.168.10.1:1883",clientId);
+        String clientId = "shiprpi";
+        client = new MqttAndroidClient(this.getApplicationContext(), "tcp://192.168.10.1:1883",clientId);
 
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS,Manifest.permission.READ_PHONE_STATE}, PackageManager.PERMISSION_GRANTED);
 
@@ -160,14 +166,17 @@ private TimerTask timerTask;
 
 
         editcourse.setFilters(new InputFilter[]{ new InputFilterMinMax("1", "359")});
-
+        editSpeed.setFilters(new InputFilter[]{ new InputFilterMinMax("1", "359")});
         offset();
-         tugle1.setEnabled(false);
+         //tugle1.setEnabled(false);
         tugle2.setEnabled(false);
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+
+
+
                     seton();
                     tugle2.setEnabled(true);
 
@@ -184,7 +193,7 @@ private TimerTask timerTask;
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     conn();
-                       tugle1.setEnabled(true);
+                       //tugle1.setEnabled(true);
 
 
                     client.setCallback(new MqttCallback() {
@@ -261,39 +270,47 @@ private TimerTask timerTask;
                     });
                 }
                 else {
-                     tugle1.setChecked(false);
+                    // tugle1.setChecked(false);
                     //disconn();
                     Toast.makeText(MainActivity.this,"disconnected",Toast.LENGTH_LONG).show();
 
 
-                    tugle1.setEnabled(false);
+                   // tugle1.setEnabled(false);
                 }
             }
         });
         // CourseText.setText(course);
+        if (course ==360)
+            course =0;
 
         btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (course ==360)
+                    course =0;
                 course++;
                 String course1=Integer.toString(course);
 
-                if (course==360) btnPlus.setEnabled(false);
-                if (course>0) btnMin.setEnabled(true);
+                //if (course==360) btnPlus.setEnabled(false);
+                //if (course>0) btnMin.setEnabled(true);
                 CourseText2.setText(course1+" °");
                 array.set(0,""+course+","+speedV);
+                published();
             }
         });
 
         btnMin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (course ==0)
+                    course =360;
                 course--;
                 String course1=Integer.toString(course);
-                if(course<360) btnPlus.setEnabled(true);
-                if (course==0) btnMin.setEnabled(false);
+             //   if(course<360) btnPlus.setEnabled(true);
+              //  if (course==0) btnMin.setEnabled(false);
                 CourseText2.setText(course1+" °");
                 array.set(0,""+course+","+speedV);
+                published();
 
             }
         });
@@ -303,10 +320,13 @@ private TimerTask timerTask;
             public void onClick(View v) {
                 speedV--;
                 String speed=Integer.toString(speedV);
-                if(speedV<20) speedPlus.setEnabled(true);
+                //if (speedV ==0)
+                  //  speedV =15;
+                if(speedV<15) speedPlus.setEnabled(true);
                 if (speedV==0) speedMin.setEnabled(false);
                 SpeedText2.setText(speed+" kmh");
                 array.set(0,""+course+","+speedV);
+                published();
 
             }
         });
@@ -315,11 +335,14 @@ private TimerTask timerTask;
             @Override
             public void onClick(View v) {
                 speedV++;
+               // if (speedV ==15)
+                 //   speedV =0;
                 String speed=Integer.toString(speedV);
-                if(speedV==20) speedPlus.setEnabled(false);
+                if(speedV==15) speedPlus.setEnabled(false);
                 if (speedV>0) speedMin.setEnabled(true);
                 SpeedText2.setText(speed+" kmh");
                 array.set(0,""+course+","+speedV);
+                published();
 
             }
         });
@@ -337,6 +360,7 @@ private TimerTask timerTask;
                 array.set(0,""+course+","+speedV);
                 //wys=course+speedV;
                 //  array.set(course,""+speedV);
+                published();
             }
 
         });
@@ -349,6 +373,7 @@ private TimerTask timerTask;
                 SpeedText2.setText(" "+speed1+"kmh");
                 array.set(0,""+course+","+speedV);
                 //array.set(0+speedV,"");
+                published();
             }
         });
 
@@ -387,7 +412,7 @@ private TimerTask timerTask;
             }}
         });
 
-
+/*
         tugle1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 toggleButtonState = isChecked;
@@ -395,28 +420,67 @@ private TimerTask timerTask;
                     timer = new Timer();
                     timerTask = new TimerTask() {
                         public void run() {
-                            // tutaj kod, który ma być wykonywany co 5 sekund
                             published();
                         }
                     };
                     timer.scheduleAtFixedRate(timerTask, 0, 5000);
                 } else {
                     timerTask.cancel();
+
                 }
             }
-        });
+        });*/
         tugle2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    setonCourse();
-               // switch2.setEnabled(true);
-            }else {
-                    setoffCourse();
-               // switch2.setEnabled(false);
+
+
+
+                    toggleButtonState = isChecked;
+                    if (toggleButtonState) {
+                        setonCourse();
+
+
+                        timer = new Timer();
+                        timerTask = new TimerTask() {
+                            public void run() {
+
+
+                                File file = new File(getFilesDir(), "location.txt");
+                                if (!file.exists()) {
+                                    try {
+                                        file.createNewFile();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                FileOutputStream fos = null;
+                                try {
+                                    fos = openFileOutput("location.txt", Context.MODE_APPEND);
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    getCurrentLocation();
+                                    Date date = new Date();
+                                    String currentTime = date.toString();
+                                    fos.write((Double.toString(latitude) + " " + Double.toString(longitude) + " " + currentTime + "\n").getBytes());
+
+                                    fos.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+
+                            }
+                        };
+                        timer.scheduleAtFixedRate(timerTask, 0, 30000);
+                    } else {
+                        setoffCourse();
+                        timerTask.cancel();
+                    }
                 }
-            }
-        });
+            });
 
         AddressText = findViewById(R.id.addressText);
         //LocationButton = findViewById(R.id.locationButton);
@@ -524,6 +588,28 @@ private TimerTask timerTask;
                                         //działające u góry
                                         latitude = locationResult.getLocations().get(index).getLatitude();
                                         longitude = locationResult.getLocations().get(index).getLongitude();
+                                        File file = new File(getFilesDir(), "location.txt");
+                                        if (!file.exists()) {
+                                            try {
+                                                file.createNewFile();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        FileOutputStream fos = null;
+                                        try {
+                                            fos = openFileOutput("file.txt", Context.MODE_PRIVATE);
+                                        } catch (FileNotFoundException e) {
+                                            e.printStackTrace();
+                                        }
+                                        try {
+                                            fos.write(Double.toString(latitude).getBytes());
+                                            fos.write(Double.toString(longitude).getBytes());
+                                            fos.close();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+
                                         //Long=longitude;
                                        // AddressText.setText("Latitude: "+ latitude + "\n" + "Longitude: "+ longitude);
                                         //AddressText.setText("Latitude: "+ latitude + "\n" + "Longitude: "+ longitude);
@@ -680,21 +766,14 @@ private TimerTask timerTask;
         speedPlus.setEnabled(true);
     }
     public void published(){
-
-
-       // String topic = "event";
-        //String message = ""+array;
-
-        String topic4="/ship/control/set_heading";// wysylłany kurs
+        String topic4="/ship/control/set_headingApp";// wysyłany kurs
         String mes1course=Integer.toString(course);
-        String topic5="/ship/control/speed";// wysyłana prędkosść
+        String topic5="/ship/control/speedApp";// wysyłana prędkosść
         String mes1speed=Integer.toString(speedV);
         try {
             client.publish(topic4, mes1course.getBytes(),0,false);
             client.publish(topic5, mes1speed.getBytes(),0,false);
 
-
-            // Toast.makeText(this,"Published Message",Toast.LENGTH_SHORT).show();
         } catch ( MqttException e) {
             e.printStackTrace();
         }
@@ -706,7 +785,7 @@ private TimerTask timerTask;
 
             client.subscribe("/ship/data/heading",0);
             client.subscribe("/ship/data/speed",0);
-            client.subscribe("fds",0);
+
 
 
 
