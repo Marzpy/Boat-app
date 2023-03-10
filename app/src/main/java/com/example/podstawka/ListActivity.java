@@ -40,8 +40,7 @@ public class ListActivity extends AppCompatActivity {
     private  ArrayList<String> items = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private static Set<String> selectedItems = new HashSet<>();
-    //private List<String> nonRemovableItems = Arrays.asList("112");
-    // private List<String> nonRemovableItems = Arrays.asList("6");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,29 +50,14 @@ public class ListActivity extends AppCompatActivity {
         newItemEditText = findViewById(R.id.newItemEditText);
         addButton = findViewById(R.id.addButton);
         confirmButton = findViewById(R.id.confirmButton);
-
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, items);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-        // Dodajemy elementy do listy
-        //items.add("997");
-        //items.add("112");
-        //items.add("532");
-
-
-
-        // items.addAll(nonRemovableItems);
-
-        // Pobierz zapisane elementy z SharedPreferences
         SharedPreferences sharedPref = getSharedPreferences("items", MODE_PRIVATE);
         Set<String> savedItems = sharedPref.getStringSet("items", new HashSet<String>());
         items.addAll(savedItems);
-
-        // Pobierz zapisane zaznaczone elementy z SharedPreferences
         SharedPreferences sharedPref2 = getSharedPreferences("selected_items", MODE_PRIVATE);
         selectedItems = sharedPref2.getStringSet("selected_items", new HashSet<String>());
-
         if (items != null) {
             // Pętla po elementach listy
             Iterator<String> iterator = items.iterator();
@@ -82,10 +66,6 @@ public class ListActivity extends AppCompatActivity {
                 System.out.println(element);
             }
         }
-
-
-
-
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,8 +74,6 @@ public class ListActivity extends AppCompatActivity {
                     Toast.makeText(ListActivity.this, "Wprowadź tekst", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-                // Sprawdź czy nowy element składa się tylko z cyfr
                 boolean isNumber = true;
                 for (int i = 0; i < newItem.length(); i++) {
                     if (!Character.isDigit(newItem.charAt(i))) {
@@ -103,7 +81,6 @@ public class ListActivity extends AppCompatActivity {
                         break;
                     }
                 }
-
                 if (isNumber) {
                     items.add(newItem);
                     adapter.notifyDataSetChanged();
@@ -118,20 +95,15 @@ public class ListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 selectedItems.clear();
                 SparseBooleanArray checked = listView.getCheckedItemPositions();
-
                 for (int i = 0; i < checked.size(); i++) {
                     int position = checked.keyAt(i);
                     if (checked.valueAt(i)) {
-
-
-                        // orignalnie selectedItems.add(items.get(position));
                         if (position < items.size()) {
                             String element = items.get(position);  // tutaj pobieramy element z listy
                             selectedItems.add(element);
                         }
                     }
                 }
-
                 // Wyświetlamy komunikat o potwierdzeniu
                 Toast.makeText(ListActivity.this, "Zaznaczone elementy zostały zapisane.", Toast.LENGTH_SHORT).show();
                 if (selectedItems.isEmpty()) {
@@ -146,27 +118,16 @@ public class ListActivity extends AppCompatActivity {
                     }}
             }
         });
-
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-                // Pobierz element do usunięcia
 
                 String item = adapter.getItem(position);
-                // if (!nonRemovableItems.contains(item)) {
+
                 // Usun element z listy
                 items.remove(item);
-                //    if (!nonRemovableItems.contains(items.get(i))) {
-                //       items.remove(items.get(i));
-                // }
                 adapter.notifyDataSetChanged();
                 return true;}
-            //   else {  // Jeśli należy, to wyświetlamy komunikat o błędzie
-            //        Toast.makeText(ListActivity.this, "Nie mozna usunąć tego elementu", Toast.LENGTH_SHORT).show();
-//
-            //   }
-            //   return true;
-            // }
         });
     /*
 
@@ -193,9 +154,6 @@ public class ListActivity extends AppCompatActivity {
             SharedPreferences sharedPref = getSharedPreferences("items", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             Set<String> itemsSet = new HashSet<>(items);
-
-
-
             SharedPreferences sharedPref2 = getSharedPreferences("selected_items", MODE_PRIVATE);
             SharedPreferences.Editor editor2 = sharedPref2.edit();
             editor2.putStringSet("selected_items", selectedItems);
@@ -210,13 +168,10 @@ public class ListActivity extends AppCompatActivity {
                     selectedItems.add(items.get(i));
                 }
             }
-
-
             editor2.putStringSet("selected_items", selectedItems);
             editor.putStringSet("items", itemsSet);
             editor.apply();
             editor2.apply();
-
             Iterator<String> iterator = items.iterator();
             while (iterator.hasNext()) {
                 String element = iterator.next();
@@ -236,7 +191,6 @@ public class ListActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = getSharedPreferences("selected_items", MODE_PRIVATE);
         Set<String> selectedItems = sharedPref.getStringSet("selected_items", new HashSet<String>());
-
         for (int i = 0; i < items.size(); i++) {
             if (selectedItems.contains(items.get(i))) {
                 // jeśli element znajduje się w zbiorze, to zaznacz go w ListView
